@@ -1,0 +1,3 @@
+.env
+/scrapers/.env
+/scrapers/__pycache__
