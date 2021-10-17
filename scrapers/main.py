@@ -1,27 +1,21 @@
-from Scraper import CircuitScraper
+from DataScrapper import DataScrapper
 import os
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
+from datetime import datetime
+import pandas as pd
 
 
 load_dotenv()
 driver_path = os.getenv('CHROMEDRIVER_PATH')
 output_path = os.getenv('OUTPUT_BASE_PATH')
 
-circuit_url = 'https://www.racefans.net/f1-information/going-to-a-race/'
+base_url = os.getenv('BASE_URL')
 
 
-# Gerando dados técnicos de circuitos
-c_scraper = CircuitScraper('chrome')
+scraper = DataScrapper('chrome')
 
-c_scraper.start_scraper(driver_path, circuit_url)
-
-c_scraper.get_circuits_url()
-
-c_scraper.scrape_data(driver_path)
-
-c_scraper.output_data(output_path + 'circuits_info.xlsx')
-
-c_scraper.driver.close()
-
-
-# Gerando dados de vitórias de pilotos
+scraper.start_scraper(driver_path)
+scraper.get_gps_url(base_url, pd.date_range('2016-01-01', datetime.now(), freq='YS').strftime("%Y").tolist())
+scraper.scrape_data()
+scraper.output_data(output_path + 'scrapper_result.xlsx')
+scraper.driver.close()
